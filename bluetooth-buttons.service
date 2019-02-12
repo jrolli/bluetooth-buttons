@@ -3,5 +3,5 @@ Description=Middleware for handling BLE button on Dell stylus
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/bluetooth-buttons --device 90:7F:61:19:EB:48 --handle 0x0016
+ExecStart=/usr/local/bin/bluetooth-buttons
 Nice=5
