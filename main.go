@@ -22,10 +22,7 @@ func main() {
 	for _, device := range devices {
 		log.Print(device)
 		if target_re.MatchString(device.Name) {
-			// target, err = evdev.Open(device.Fn)
-			// if err != nil {
-			// 	log.Fatal(err)
-			// }
+			log.Print(device)
 			target = device
 			err = target.Grab()
 			log.Printf("Found PN579X at %s", device.Fn)
@@ -35,6 +32,7 @@ func main() {
 
 			defer target.Release()
 			found_device = true
+			break
 		}
 	}
 	if !found_device {
