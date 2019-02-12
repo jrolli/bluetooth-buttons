@@ -20,7 +20,6 @@ func main() {
 	var target *evdev.InputDevice
 	found_device := false
 	for _, device := range devices {
-		log.Print(device)
 		if target_re.MatchString(device.Name) {
 			log.Print(device)
 			target = device
