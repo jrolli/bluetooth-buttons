@@ -17,16 +17,22 @@ func main() {
 	}
 
 	target_re := regexp.MustCompile("Dell Active Pen PN579X Keyboard")
-	var target evdev.InputDevice
+	var target *evdev.InputDevice
 	found_device := false
 	for _, device := range devices {
+		log.Print(device)
 		if target_re.MatchString(device.Name) {
-			target := device
+			// target, err = evdev.Open(device.Fn)
+			// if err != nil {
+			// 	log.Fatal(err)
+			// }
+			target = device
 			err = target.Grab()
 			log.Printf("Found PN579X at %s", device.Fn)
 			if err != nil {
 				log.Fatal(err)
 			}
+
 			defer target.Release()
 			found_device = true
 		}
@@ -43,26 +49,25 @@ func main() {
 
 	log.Print("Entering read loop...")
 	for {
-		log.Print("Reading event...")
+		// log.Print("Reading event...")
 		ev, err := target.ReadOne()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if ev.Type == evdev.EV_KEY {
-			log.Print(ev)
+		if ev.Type == evdev.EV_KEY && ev.Value == 0 {
 			switch ev.Code {
 			case evdev.KEY_F20:
 				// Single press
-				kbd.KeyPress(uinput.KeyPageDown)
+				kbd.KeyPress(evdev.KEY_PAGEDOWN)
 			case evdev.KEY_F19:
 				// Double press
-				kbd.KeyPress(uinput.KeyPageUp)
+				kbd.KeyPress(evdev.KEY_PAGEUP)
 			case evdev.KEY_F18:
 				// Long press
-				kbd.KeyDown(uinput.KeyLeftCtrl)
-				kbd.KeyPress(uinput.KeyRight)
-				kbd.KeyUp(uinput.KeyLeftCtrl)
+				kbd.KeyDown(evdev.KEY_LEFTCTRL)
+				kbd.KeyPress(evdev.KEY_RIGHT)
+				kbd.KeyUp(evdev.KEY_LEFTCTRL)
 			}
 		}
 	}
