@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="input", ATTRS{name}=="Dell Active Pen PN579X Keyboard", RUN+="/usr/bin/systemctl start bluetooth-buttons.service"
